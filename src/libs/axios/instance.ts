@@ -3,6 +3,11 @@ import axios from "axios";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
 
+
+
+
+console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
+
 interface CustomSession extends Session {
     accessToken?: string;
 }
@@ -11,9 +16,10 @@ const headers = {
     "Content-Type": "application/json"
 }
 const instance = axios.create({
-    baseURL: environment.API_URL,
-    headers,
-    timeout: 60 * 1000,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 instance.interceptors.request.use(
