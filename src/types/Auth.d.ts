@@ -7,4 +7,8 @@ interface IRegister {
 
 }
 
-export type {IRegister};
+interface IActivation {
+    code: string;
+}
+
+export type {IRegister, IActivation};
