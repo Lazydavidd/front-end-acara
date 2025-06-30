@@ -39,7 +39,7 @@ const Activation = (props: PropTypes) => {
                         : "Confirmation Code Is Invalid"}
                     </p>
 
-                <Button className="mt-4 w-fit" variant="bordered" color="danger" onClick={() => router.push('/')}> Back To Home</Button>
+                <Button className="mt-4 w-fit" variant="bordered" color="danger" onPress={() => router.push('/')}> Back To Home</Button>
             </div>
         </div>
     );
