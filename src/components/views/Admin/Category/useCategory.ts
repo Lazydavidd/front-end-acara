@@ -117,6 +117,8 @@ const getCategories = async () => {
         handleChangePage,
         handleSearch,
         handleClearSearch,
+
+        refetchCategory,
     }
 }
 
