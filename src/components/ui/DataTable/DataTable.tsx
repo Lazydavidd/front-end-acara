@@ -15,14 +15,10 @@ import {
 import { ChangeEvent, Key, ReactNode, useMemo } from "react";
 import { CiSearch } from "react-icons/ci";
 import { cn } from "@/utils/cn";
-
-const LIMIT_LISTS = [
-  { value: "10", label: "10" },
-  { value: "20", label: "20" },
-  { value: "50", label: "50" },
-];
+import { LIMIT_LISTS } from "@/constants/list.constant";
 
 interface PropTypes {
+  limit: string;
   buttonTopContentLabel?: string;
   columns: Record<string, unknown>[];
   data: Record<string, unknown>[];
@@ -37,7 +33,7 @@ interface PropTypes {
   currentLimit: number;
   onChangePage: (page: number) => void;
   onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
-  onSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
   onClearSearch: () => void;
 }
 
@@ -57,7 +53,7 @@ const DataTable = (props: PropTypes) => {
     currentLimit,
     onChangePage,
     onChangeLimit,
-    onSearch,
+    onChangeSearch,
     onClearSearch,
   } = props;
 
@@ -71,7 +67,7 @@ const DataTable = (props: PropTypes) => {
             placeholder="Search by name"
             startContent={<CiSearch />}
             onClear={onClearSearch}
-            onChange={onSearch}
+            onChange={onChangeSearch}
           />
         )}
         {buttonTopContentLabel && (
@@ -83,7 +79,7 @@ const DataTable = (props: PropTypes) => {
     );
   }, [
     buttonTopContentLabel,
-    onSearch,
+    onChangeSearch,
     onClearSearch,
     onClickButtonTopContent,
     showSearch,
@@ -109,17 +105,16 @@ const DataTable = (props: PropTypes) => {
             ))}
           </Select>
         )}
-        {totalPages > 1 && (
-          <Pagination
-            isCompact
-            showControls
-            color="danger"
-            page={Number(currentPage)}
-            total={totalPages}
-            onChange={onChangePage}
-            loop
-          />
-        )}
+        {totalPages > 0 && (
+        <Pagination
+          isCompact
+          showControls
+          color="danger"
+          page={Number(currentPage)}
+          total={totalPages}
+          onChange={onChangePage}
+        />
+      )}
       </div>
     );
   }, [
@@ -137,7 +132,7 @@ const DataTable = (props: PropTypes) => {
       bottomContentPlacement="outside"
       classNames={{
         base: "max-w-full",
-        wrapper: cn({ "overflow-x-hidden": isLoading }),
+        wrapper: cn({ "overflow-x-auto": isLoading }),
       }}
       topContent={TopContent}
       topContentPlacement="outside"

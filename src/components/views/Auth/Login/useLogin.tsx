@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,6 +6,7 @@ import { ILogin } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react";
+import { ToasterContext } from "@/contexts/ToasterContext";
 
 const loginSchema = yup.object().shape({
   identifier: yup.string().required("please input your email or password"),
@@ -15,7 +16,7 @@ const loginSchema = yup.object().shape({
 const useLogin = () => {
     const router = useRouter();
     const callbackUrl = (router.query.callbackUrl as string) || "/"; // ✅ Dipindah ke sini
-
+    const {setToaster} = useContext(ToasterContext);
     const [isVisible, setIsVisible] = useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -46,13 +47,22 @@ const useLogin = () => {
     const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation({
         mutationFn: loginService,
         onError(error) {
+            setToaster({ 
+                message: error.message, 
+                type: "error" 
+            });
             setError("root", {
                 message: error.message,
             });
         },
         onSuccess: () => {
-            router.push(callbackUrl);
             reset();
+            setToaster({
+                type: 'success',
+                message: 'Login Success',
+            });
+            router.push(callbackUrl);
+
         },
     });
 
