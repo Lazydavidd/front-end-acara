@@ -7,6 +7,7 @@ import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LISTS_CATEGORY } from "./Category.constant";
 import useCategory from "./useCategory";
 import AddCategoryModal from "./AddCategoryModal/AddCategoryModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
 
 
 const Category = () => {
@@ -24,9 +25,13 @@ const Category = () => {
         handleChangePage,
         handleSearch,
         handleClearSearch,
+
+        selectedId, 
+        setSelectedId,
     } = useCategory();
 
     const addCategoryModal = useDisclosure();
+    const deleteCategoryModal= useDisclosure();
 
     useEffect(() => {
         if(isReady) {
@@ -39,6 +44,10 @@ const renderCell = useCallback(
     const cellValue = category[columnKey as keyof typeof category];
 
     switch (columnKey) {
+      case "icon":
+          return (
+            <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
+          );
       case "actions":
         return (
           <Dropdown>
@@ -57,6 +66,10 @@ const renderCell = useCallback(
               <DropdownItem
                 key="delete-category"
                 className="text-danger"
+                onPress={() => {
+                  setSelectedId(`${category._id}`);
+                  deleteCategoryModal.onOpen();
+                }}
               >
                 Delete
               </DropdownItem>
@@ -94,6 +107,12 @@ const renderCell = useCallback(
       )}
       <AddCategoryModal
         {...addCategoryModal}
+        refetchCategory={refetchCategory}
+      />
+      <DeleteCategoryModal
+        {...deleteCategoryModal}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
         refetchCategory={refetchCategory}
       />
     </section>
