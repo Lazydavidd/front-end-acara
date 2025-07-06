@@ -93,7 +93,6 @@ const renderCell = useCallback(
           data={dataCategory?.data || []}
           emptyContent="Category is empty"
           isLoading={isLoadingCategory || isRefetchingCategory}
-          limit={String(currentLimit)} // Contoh: "10"
           currentLimit={Number(currentLimit) || 10}
           onChangePage={handleChangePage}
           onChangeLimit={handleChangeLimit}
