@@ -1,4 +1,4 @@
-import { LIMIT_DEFAULT, DELAY , PAGE_DEFAULT } from "@/constants/list.constant";
+import { DELAY, LIMIT_DEFAULT, PAGE_DEFAULT } from "@/constants/list.constant";
 import { useRouter } from "next/router";
 import useDebounce from "./useDebounce";
 import { ChangeEvent } from "react";
