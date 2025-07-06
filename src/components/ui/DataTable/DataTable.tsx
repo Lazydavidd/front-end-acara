@@ -18,7 +18,7 @@ import { cn } from "@/utils/cn";
 import { LIMIT_LISTS } from "@/constants/list.constant";
 
 interface PropTypes {
-  limit: string;
+  //limit: string;
   buttonTopContentLabel?: string;
   columns: Record<string, unknown>[];
   data: Record<string, unknown>[];
@@ -59,7 +59,7 @@ const DataTable = (props: PropTypes) => {
 
   const TopContent = useMemo(() => {
     return (
-      <div className="flex flex-col-reverse items-start justify-between gap-y-4 lg:flex-row lg:items-center">
+      <div className="flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
         {showSearch && (
           <Input
             isClearable
