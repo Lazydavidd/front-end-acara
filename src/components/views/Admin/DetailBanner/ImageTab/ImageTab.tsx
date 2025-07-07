@@ -58,14 +58,16 @@ const ImageTab = (props: PropTypes) => {
             <p className="text-sm font-medium text-default-700">
               Current Image
             </p>
-            <Skeleton isLoaded={!!currentImage} className="h-32 rounded-lg">
+            <Skeleton isLoaded={!!currentImage} className="rounded-lg">
+            <div className="relative w-full aspect-video">
               <Image
                 src={currentImage}
                 alt="Image"
                 fill
-                className="!relative rounded-lg"
+                className="rounded-lg object-cover"
               />
-            </Skeleton>
+            </div>
+          </Skeleton>
           </div>
           <Controller
             name="image"
