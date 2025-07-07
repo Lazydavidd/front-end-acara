@@ -1,87 +1,64 @@
-import DataTable from "@/components/ui/DataTable/DataTable";
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from "@nextui-org/react";
+import DataTable from "@/components/ui/DataTable";
+import { useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-import { CiMenuKebab } from "react-icons/ci";
 import { COLUMN_LISTS_CATEGORY } from "./Category.constant";
 import useCategory from "./useCategory";
 import AddCategoryModal from "./AddCategoryModal/AddCategoryModal";
 import DeleteCategoryModal from "./DeleteCategoryModal";
-
+import useChangeUrl from "@/hooks/useChangeUrl";
+import DropdownAction from "@/components/commons/DropdownAction";
 
 const Category = () => {
-    const {push, isReady, query} = useRouter();
-    const {
-        setURL, 
-        currentPage, 
-        currentLimit, 
-        dataCategory, 
-        isLoadingCategory, 
-        isRefetchingCategory,
-        refetchCategory,
+  const { push, isReady, query } = useRouter();
+  const {
+    dataCategory,
+    isLoadingCategory,
+    isRefetchingCategory,
+    refetchCategory,
 
-        handleChangeLimit,
-        handleChangePage,
-        handleSearch,
-        handleClearSearch,
+    selectedId,
+    setSelectedId,
+  } = useCategory();
 
-        selectedId, 
-        setSelectedId,
-    } = useCategory();
+  const addCategoryModal = useDisclosure();
+  const deleteCategoryModal = useDisclosure();
+  const { setUrl } = useChangeUrl();
 
-    const addCategoryModal = useDisclosure();
-    const deleteCategoryModal= useDisclosure();
+  useEffect(() => {
+    if (isReady) {
+      setUrl();
+    }
+  }, [isReady]);
 
-    useEffect(() => {
-        if(isReady) {
-            setURL();
-        }
-    }, [isReady])
+  const renderCell = useCallback(
+    (category: Record<string, unknown>, columnKey: Key) => {
+      const cellValue = category[columnKey as keyof typeof category];
 
-const renderCell = useCallback(
-  (category: Record<string, unknown>, columnKey: Key) => {
-    const cellValue = category[columnKey as keyof typeof category];
-
-    switch (columnKey) {
-      case "icon":
+      switch (columnKey) {
+        case "icon":
           return (
             <Image src={`${cellValue}`} alt="icon" width={100} height={200} />
           );
-      case "actions":
-        return (
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly size="sm" variant="light">
-                <CiMenuKebab className="text-default-700" />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem
-                key="detail-category-button"
-                onPress={() => push(`/admin/category/${category._id}`)}
-              >
-                Detail Category
-              </DropdownItem>
-              <DropdownItem
-                key="delete-category"
-                className="text-danger"
-                onPress={() => {
-                  setSelectedId(`${category._id}`);
-                  deleteCategoryModal.onOpen();
-                }}
-              >
-                Delete
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        );
-      default:
-        return cellValue as ReactNode;
-    }
-  },
-  [push]
-);
+        case "actions":
+          return (
+            <DropdownAction
+              onPressButtonDetail={() =>
+                push(`/admin/category/${category._id}`)
+              }
+              onPressButtonDelete={() => {
+                setSelectedId(`${category._id}`);
+                deleteCategoryModal.onOpen();
+              }}
+            />
+          );
+        default:
+          return cellValue as ReactNode;
+      }
+    },
+    [push],
+  );
 
   return (
     <section>
@@ -89,19 +66,12 @@ const renderCell = useCallback(
         <DataTable
           buttonTopContentLabel="Create Category"
           columns={COLUMN_LISTS_CATEGORY}
-          currentPage={Number(currentPage)}
           data={dataCategory?.data || []}
           emptyContent="Category is empty"
           isLoading={isLoadingCategory || isRefetchingCategory}
-          currentLimit={Number(currentLimit) || 10}
-          onChangePage={handleChangePage}
-          onChangeLimit={handleChangeLimit}
-          onChangeSearch={handleSearch}
-          onClearSearch={handleClearSearch}
           onClickButtonTopContent={addCategoryModal.onOpen}
-          renderCell={renderCell}   
-         totalPages={dataCategory?.pagination.totalPages ?? 1}
-
+          renderCell={renderCell}
+          totalPages={dataCategory?.pagination.totalPages?? 1}
         />
       )}
       <AddCategoryModal
@@ -115,7 +85,6 @@ const renderCell = useCallback(
         refetchCategory={refetchCategory}
       />
     </section>
-
   );
 };
 

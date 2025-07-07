@@ -29,6 +29,8 @@ interface PropTypes {
   showLimit?: boolean;
   showSearch?: boolean;
   totalPages: number;
+
+  
 }
 
 const DataTable = (props: PropTypes) => {
