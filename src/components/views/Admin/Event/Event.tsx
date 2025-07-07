@@ -90,14 +90,6 @@ const Event = () => {
           onClickButtonTopContent={addEventModal.onOpen}
           renderCell={renderCell}
           totalPages={dataEvents?.pagination.totalPages}
-
-           currentPage={currentPage}
-          currentLimit={currentLimit}
-          onChangePage={setCurrentPage}
-          onChangeLimit={(e) => setCurrentLimit(Number(e.target.value))}
-          onChangeSearch={(e) => setSearch(e.target.value)}
-          onClearSearch={() => setSearch("")}
-          
         />
       )}
       <AddEventModal {...addEventModal} refetchEvents={refetchEvents} />
