@@ -1,3 +1,6 @@
+import { LIMIT_LISTS } from "@/constants/list.constant";
+import useChangeUrl from "@/hooks/useChangeUrl";
+import { cn } from "@/utils/cn";
 import {
   Button,
   Input,
@@ -14,11 +17,8 @@ import {
 } from "@nextui-org/react";
 import { ChangeEvent, Key, ReactNode, useMemo } from "react";
 import { CiSearch } from "react-icons/ci";
-import { cn } from "@/utils/cn";
-import { LIMIT_LISTS } from "@/constants/list.constant";
 
 interface PropTypes {
-  //limit: string;
   buttonTopContentLabel?: string;
   columns: Record<string, unknown>[];
   data: Record<string, unknown>[];
@@ -29,15 +29,17 @@ interface PropTypes {
   showLimit?: boolean;
   showSearch?: boolean;
   totalPages: number;
-  currentPage: number;
-  currentLimit: number;
-  onChangePage: (page: number) => void;
-  onChangeLimit: (e: ChangeEvent<HTMLSelectElement>) => void;
-  onChangeSearch: (e: ChangeEvent<HTMLInputElement>) => void;
-  onClearSearch: () => void;
 }
 
 const DataTable = (props: PropTypes) => {
+  const {
+    currentLimit,
+    currentPage,
+    handleChangeLimit,
+    handleChangePage,
+    handleSearch,
+    handleClearSearch,
+  } = useChangeUrl();
   const {
     buttonTopContentLabel,
     columns,
@@ -49,25 +51,19 @@ const DataTable = (props: PropTypes) => {
     showLimit = true,
     showSearch = true,
     totalPages,
-    currentPage,
-    currentLimit,
-    onChangePage,
-    onChangeLimit,
-    onChangeSearch,
-    onClearSearch,
   } = props;
 
   const TopContent = useMemo(() => {
     return (
-      <div className="flex flex-col items-start justify-between gap-y-4 lg:flex-row lg:items-center">
+      <div className="flex flex-col-reverse items-start justify-between gap-y-4 lg:flex-row lg:items-center">
         {showSearch && (
           <Input
             isClearable
             className="w-full sm:max-w-[24%]"
             placeholder="Search by name"
             startContent={<CiSearch />}
-            onClear={onClearSearch}
-            onChange={onChangeSearch}
+            onClear={handleClearSearch}
+            onChange={handleSearch}
           />
         )}
         {buttonTopContentLabel && (
@@ -79,10 +75,9 @@ const DataTable = (props: PropTypes) => {
     );
   }, [
     buttonTopContentLabel,
-    onChangeSearch,
-    onClearSearch,
+    handleSearch,
+    handleClearSearch,
     onClickButtonTopContent,
-    showSearch,
   ]);
 
   const BottomContent = useMemo(() => {
@@ -94,7 +89,7 @@ const DataTable = (props: PropTypes) => {
             size="md"
             selectedKeys={[`${currentLimit}`]}
             selectionMode="single"
-            onChange={onChangeLimit}
+            onChange={handleChangeLimit}
             startContent={<p className="text-small">Show:</p>}
             disallowEmptySelection
           >
@@ -105,25 +100,25 @@ const DataTable = (props: PropTypes) => {
             ))}
           </Select>
         )}
-        {totalPages > 0 && (
-        <Pagination
-          isCompact
-          showControls
-          color="danger"
-          page={Number(currentPage)}
-          total={totalPages}
-          onChange={onChangePage}
-        />
-      )}
+        {totalPages > 1 && (
+          <Pagination
+            isCompact
+            showControls
+            color="danger"
+            page={Number(currentPage)}
+            total={totalPages}
+            onChange={handleChangePage}
+            loop
+          />
+        )}
       </div>
     );
   }, [
-    showLimit,
     currentLimit,
     currentPage,
     totalPages,
-    onChangeLimit,
-    onChangePage,
+    handleChangeLimit,
+    handleChangePage,
   ]);
 
   return (
@@ -132,7 +127,7 @@ const DataTable = (props: PropTypes) => {
       bottomContentPlacement="outside"
       classNames={{
         base: "max-w-full",
-        wrapper: cn({ "overflow-x-auto": isLoading }),
+        wrapper: cn({ "overflow-x-hidden": isLoading }),
       }}
       topContent={TopContent}
       topContentPlacement="outside"
@@ -155,7 +150,7 @@ const DataTable = (props: PropTypes) => {
           </div>
         }
       >
-        {(item: Record<string, unknown>) => (
+        {(item) => (
           <TableRow key={item._id as Key}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
