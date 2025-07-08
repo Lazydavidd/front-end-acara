@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import AppShell from "@/components/commons/AppShell";
 import { ToasterProvider } from "@/contexts/ToasterContext";
+import { onErrorHander } from "@/libs/axios/reponseHandler";
 
 
 const queryClient = new QueryClient({
@@ -12,7 +13,14 @@ defaultOptions: {
   queries: {
     refetchOnWindowFocus: false,
     retry: false,
+    throwOnError(error) {
+      onErrorHander(error);
+      return false;
+    }
   },
+  mutations: {
+    onError: onErrorHander
+  }
 },
 });
 
