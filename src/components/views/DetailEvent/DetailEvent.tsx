@@ -31,7 +31,7 @@ const DetailEvent = () => {
       <Script
         src={environment.MIDTRANS_SNAP_URL}
         data-client-key={environment.MIDTRANS_CLIENT_KEY}
-        strategy="lazyOnload"
+        strategy="beforeInteractive"
       />
       <Skeleton className="h-6 w-1/4 rounded-lg" isLoaded={!!dataEvent?.name}>
         <Breadcrumbs>
