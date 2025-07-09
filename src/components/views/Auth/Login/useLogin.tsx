@@ -9,74 +9,68 @@ import { signIn } from "next-auth/react";
 import { ToasterContext } from "@/contexts/ToasterContext";
 
 const loginSchema = yup.object().shape({
-  identifier: yup.string().required("please input your email or password"),
-  password: yup.string().min(8, "Minimal 8 Characters").required("please input your Password"),
+  identifier: yup.string().required("Please input your email or password"),
+  password: yup.string().required("Please input your password"),
 });
 
 const useLogin = () => {
-    const router = useRouter();
-    const callbackUrl = (router.query.callbackUrl as string) || "/"; // ✅ Dipindah ke sini
-    const {setToaster} = useContext(ToasterContext);
-    const [isVisible, setIsVisible] = useState(false);
-    const toggleVisibility = () => setIsVisible(!isVisible);
+  const router = useRouter();
+  const [isVisible, setIsVisible] = useState(false);
+  const toggleVisibility = () => setIsVisible(!isVisible);
+  const { setToaster } = useContext(ToasterContext);
 
-    const {
-        control,
-        handleSubmit,
-        formState: { errors },
-        reset,
-        setError,
-    } = useForm({
-        resolver: yupResolver(loginSchema),
+  const callbackUrl: string = (router.query.callbackUrl as string) || "/";
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setError,
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+
+  const loginService = async (payload: ILogin) => {
+    const result = await signIn("credentials", {
+      ...payload,
+      redirect: false,
+      callbackUrl,
     });
+    if (result?.error && result?.status === 401) {
+      throw new Error("Login Failed");
+    }
+  };
 
-    const loginService = async (payload: ILogin) => {
-        const result = await signIn("credentials", {
-            ...payload,
-            redirect: false,
-            callbackUrl,
-        });
+  const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation({
+    mutationFn: loginService,
+    onError: () => {
+      setToaster({
+        type: "error",
+        message: "Your credential is wrong",
+      });
+    },
+    onSuccess: () => {
+      reset();
+      setToaster({
+        type: "success",
+        message: "Login success",
+      });
+      router.push(callbackUrl);
+    },
+  });
 
-        if (result?.error && result?.status === 401) {
-            throw new Error("Email or Username not match with your password");
-        }
+  const handleLogin = (data: ILogin) => mutateLogin(data);
 
-        return result;
-    };
-
-    const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation({
-        mutationFn: loginService,
-        onError(error) {
-            setToaster({ 
-                message: error.message, 
-                type: "error" 
-            });
-            setError("root", {
-                message: error.message,
-            });
-        },
-        onSuccess: () => {
-            reset();
-            setToaster({
-                type: 'success',
-                message: 'Login Success',
-            });
-            router.push(callbackUrl);
-
-        },
-    });
-
-    const handleLogin = (data: ILogin) => mutateLogin(data);
-
-    return {
-        isVisible,
-        toggleVisibility,
-        control,
-        handleSubmit,
-        handleLogin,
-        isPendingLogin,
-        errors,
-    };
+  return {
+    isVisible,
+    toggleVisibility,
+    control,
+    handleSubmit,
+    handleLogin,
+    isPendingLogin,
+    errors,
+  };
 };
 
 export default useLogin;
