@@ -1,40 +1,85 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# back-end-acara
+
+## Table of Contents
+
+- [Overview](#overview)  
+- [Screenshot](#screenshot)  
+- [Getting Started](#getting-started)  
+  - [Prerequisites](#prerequisites)  
+  - [Installation](#installation)  
+- [Usage](#usage)  
+- [Testing](#testing)  
+
+---
+
+## Overview
+
+**back-end-acara** is a comprehensive back-end development toolkit built with Node.js, designed to accelerate the creation of modern scalable web applications. It leverages the latest features in Node.js, with built-in support for middleware, route and user management, combined with Midtrans SDK for safely handling any payment system logic.
+
+### Why `back-end-acara`?
+
+This project was developed to:
+
+- 📦 **API Integration & Handling**: Centralized Axios instance and response formatter middleware to streamline communication with third-party services.
+- 🔐 **Modern Design Patterns**: Follows SOLID principles with theme-architecture model, context, controller, and services.
+- 🔑 **Secure Routing & Middleware**: Role-based access control and authentication for transparent request handling.
+- ⚙️ **Type Safety & Configuration**: TypeScript typed and environment config powered clean structure, logs, and modular separation.
+- 🧩 **Reusable UI Components & Layout**: Modular components like AppShell, DataTable, and Toaster enhance development efficiency.
+- 🎯 **Custom-built Utilities**: Helpers for debouncing, result handling, URL management, and more optimize user interactions.
+
+---
+
+## Screenshot
+
+Example of the app interface:
+
+![Homepage](./homepage.png)
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+This project requires the following dependencies:
+
+- **Programming Language**: TypeScript  
+- **Package Manager**: `npm`
+
+---
+
+### Installation
+
+Follow these steps to clone the repo and install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Clone the repository
+git clone https://github.com/Lazydavidd/back-end-acara
+
+# 2. Navigate to the project directory
+cd back-end-acara
+
+# 3. Install the dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Run the project with:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+---
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+Unit tests are located under the `test/` directory, using the Jest framework. Run the test suite with:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npm test
+```
