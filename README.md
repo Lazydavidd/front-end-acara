@@ -15,9 +15,9 @@
 
 ## Overview
 
-**back-end-acara** is a comprehensive back-end development toolkit built with Node.js, designed to accelerate the creation of modern scalable web applications. It leverages the latest features in Node.js, with built-in support for middleware, route and user management, combined with Midtrans SDK for safely handling any payment system logic.
+**Front End Project** is a comprehensive back-end development toolkit built with Node.js, designed to accelerate the creation of modern scalable web applications. It leverages the latest features in Node.js, with built-in support for middleware, route and user management, combined with Midtrans SDK for safely handling any payment system logic.
 
-### Why `back-end-acara`?
+### Why `Front End Project`?
 
 This project was developed to:
 
